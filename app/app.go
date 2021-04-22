@@ -15,5 +15,8 @@ func CreateUrlMappings() {
 	{
 		v1.POST("/users", handler.CreateUserHandler)
 		v1.GET("/users", handler.GetallUserHandler)
+		v1.GET("/:id", handler.GetSpecificHandler)
+		v1.PUT("/:id", handler.UpdateUserHandler)
+		v1.DELETE("/:id", handler.DeleteUserHandler)
 	}
 }

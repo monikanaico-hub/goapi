@@ -1,4 +1,4 @@
-package configaration
+package configuration
 
 var Username = "root"
 var Password = "1234"

@@ -3,13 +3,24 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/monikanaico-hub/goapi/configaration"
+	"github.com/joho/godotenv"
 )
 
 func dsn(db string) string {
-	return fmt.Sprintf("%s:%s@tcp(%s)/%s", configaration.Username, configaration.Password, configaration.Hostname, configaration.Dbname)
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	dbHost := os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT")
+	dbUsername := os.Getenv("DB_USERNAME")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+	return fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUsername, dbPassword, dbHost, dbName)
 }
 
 func Dberror(err error) {
@@ -18,8 +29,8 @@ func Dberror(err error) {
 	}
 }
 
-func DbConnection() *sql.DB {
-	db, err := sql.Open("mysql", dsn(configaration.Dbname))
+func DbConnection() (*sql.DB, error) {
+	db, err := sql.Open("mysql", dsn(os.Getenv("DB_NAME")))
 	Dberror(err)
-	return db
+	return db, err
 }
